@@ -116,7 +116,7 @@ def user_query(prompt):
 
 ### 1. Clone and Setup
 ```bash
-git clone <your-repo>
+git clone https://github.com/faisal1025/Q-AChatBotAirtribe.git
 cd Q&AChatBot
 python -m venv env
 env\Scripts\activate  # Windows
