@@ -35,13 +35,17 @@ def semantic_search(user_prompt, collection_name="documents", n_results=3):
             print(f"Found {len(results['documents'][0])} relevant chunks:")
             print("-" * 50)
             
+            docs = []
+            source = []
             for i, (doc, metadata) in enumerate(zip(results['documents'][0], results['metadatas'][0])):
                 print(f"Result {i+1}:")
                 print(f"Source: {metadata.get('filename', 'Unknown')}")
                 print(f"Content: {doc[:100]}...")  # First 200 characters
                 print("-" * 50)
-            
-            return results['documents'][0]  # Return the document chunks
+                docs.append(doc)
+                source.append(metadata.get('filename', 'Unknown'))
+
+            return docs, source
         else:
             print("No relevant results found.")
             return []
@@ -51,18 +55,11 @@ def semantic_search(user_prompt, collection_name="documents", n_results=3):
         return []
 
 
-def save_context(embeddings, chunks, content_path, collection_name="documents"):
+def save_context(embeddings, chunks, metadata, collection_name="documents"):
     collection = chroma_client.get_or_create_collection(name=collection_name)
 
-    ids = [f"chunk_{i}" for i in range(len(chunks))]
-    metadata = [
-        {
-            "source": content_path,
-            "filename": os.path.basename(content_path) if content_path else "unknown",
-            "chunk_index": i
-        }
-        for i in range(len(chunks))
-    ]
+
+    ids = [f"{meta.get('filename', 'unknown')}_{i}" for meta, i in zip(metadata, range(len(metadata)))]
 
     collection.add(
         embeddings=embeddings,
@@ -71,7 +68,6 @@ def save_context(embeddings, chunks, content_path, collection_name="documents"):
         ids=ids
     )
 
-    print(f"saved {len(chunks)} chunks from {content_path} to collection '{collection_name}'")
     return True
 
 def query_context(query_embedding, collection_name="documents", n_results=3):
@@ -80,7 +76,8 @@ def query_context(query_embedding, collection_name="documents", n_results=3):
     
     results = collection.query(
         query_embeddings=[query_embedding],
-        n_results=n_results
+        n_results=n_results,
+        
     )
     
     return results
