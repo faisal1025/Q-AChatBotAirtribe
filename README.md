@@ -2,7 +2,7 @@
 
 A Flask-based Question & Answer ChatBot that implements a complete **Retrieval-Augmented Generation (RAG)** pipeline using OpenAI embeddings and ChromaDB for vector storage.
 
-## � Project Overview
+## � Project Overview:
 
 This intelligent chatbot system crawls website content, processes it into searchable chunks, stores vector embeddings in ChromaDB, and provides accurate answers to user questions based on the retrieved context. The system uses a three-stage RAG pipeline:
 
