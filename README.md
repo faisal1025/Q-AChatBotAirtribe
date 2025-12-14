@@ -144,14 +144,9 @@ Create `.env` file:
 OPENAI_API_KEY=your_openai_api_key_here
 ```
 
-### 3. Initialize Knowledge Base
-```python
-python bot/__init__.py  # Auto-crawls and processes content
-```
-
-### 4. Start the API Server
+### 3. Start the API Server
 ```bash
-python main.py
+flask --app main run
 ```
 
 ## 🕷️ Steps to Run the Crawler
